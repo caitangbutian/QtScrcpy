@@ -20,6 +20,7 @@ public:
     void setFrameSize(const QSize &frameSize);
     const QSize &frameSize();
     void updateTextures(quint8 *dataY, quint8 *dataU, quint8 *dataV, quint32 linesizeY, quint32 linesizeU, quint32 linesizeV);
+    void setGrayScale(bool on);
 
 protected:
     void initializeGL() override;
@@ -37,6 +38,7 @@ private:
     QSize m_frameSize = { -1, -1 };
     bool m_needUpdate = false;
     bool m_textureInited = false;
+    bool m_grayScale = false;
 
     // 顶点缓冲对象(Vertex Buffer Objects, VBO)：默认即为VertexBuffer(GL_ARRAY_BUFFER)类型
     QOpenGLBuffer m_vbo;

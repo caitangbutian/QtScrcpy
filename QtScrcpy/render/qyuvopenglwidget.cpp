@@ -57,6 +57,7 @@ static QString s_fragShader = R"(
     uniform sampler2D textureY;     // uniform 纹理单元，利用纹理单元可以使用多个纹理
     uniform sampler2D textureU;     // sampler2D是2D采样器
     uniform sampler2D textureV;     // 声明yuv三个纹理单元
+    uniform int u_grayScale;        // 灰度开关（0/1），每帧由 setGrayScale 传入
     void main(void)
     {
         vec3 yuv;
@@ -79,6 +80,11 @@ static QString s_fragShader = R"(
         rgb.r = dot(yuv, Rcoeff);
         rgb.g = dot(yuv, Gcoeff);
         rgb.b = dot(yuv, Bcoeff);
+        // 灰度模式：GPU 端按亮度加权去色，并顺带调暗以降低摸鱼时的视觉显著度
+        if (u_grayScale == 1) {
+            float g = dot(rgb, vec3(0.299, 0.587, 0.114));
+            rgb = vec3(g) * 0.85;
+        }
         // 输出颜色值
         gl_FragColor = vec4(rgb, 1.0);
     }
@@ -129,6 +135,14 @@ const QSize &QYUVOpenGLWidget::frameSize()
     return m_frameSize;
 }
 
+void QYUVOpenGLWidget::setGrayScale(bool on)
+{
+    if (m_grayScale != on) {
+        m_grayScale = on;
+        update();
+    }
+}
+
 void QYUVOpenGLWidget::updateTextures(quint8 *dataY, quint8 *dataU, quint8 *dataV, quint32 linesizeY, quint32 linesizeU, quint32 linesizeV)
 {
     if (m_textureInited) {
@@ -158,6 +172,7 @@ void QYUVOpenGLWidget::initializeGL()
 void QYUVOpenGLWidget::paintGL()
 {
     m_shaderProgram.bind();
+    m_shaderProgram.setUniformValue("u_grayScale", m_grayScale ? 1 : 0);
 
     if (m_needUpdate) {
         deInitTextures();

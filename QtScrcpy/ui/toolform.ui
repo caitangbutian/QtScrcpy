@@ -184,6 +184,16 @@
     </widget>
    </item>
    <item>
+    <widget class="QPushButton" name="grayBtn">
+     <property name="toolTip">
+      <string>grayscale (toggle)</string>
+     </property>
+     <property name="text">
+      <string>灰</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QPushButton" name="screenShotBtn">
      <property name="toolTip">
       <string>screen shot</string>

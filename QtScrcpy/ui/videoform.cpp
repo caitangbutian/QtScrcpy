@@ -706,6 +706,13 @@ void VideoForm::grabCursor(bool grab)
     MouseTap::getInstance()->enableMouseEventTap(rc, grab);
 }
 
+void VideoForm::setGrayScale(bool on)
+{
+    if (m_videoWidget) {
+        m_videoWidget->setGrayScale(on);
+    }
+}
+
 void VideoForm::onFrame(int width, int height, uint8_t *dataY, uint8_t *dataU, uint8_t *dataV, int linesizeY, int linesizeU, int linesizeV)
 {
     updateRender(width, height, dataY, dataU, dataV, linesizeY, linesizeU, linesizeV);

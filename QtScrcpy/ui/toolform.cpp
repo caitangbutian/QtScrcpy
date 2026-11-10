@@ -315,3 +315,13 @@ void ToolForm::on_clipboardBtn_clicked()
     }
     device->requestDeviceClipboard();
 }
+
+void ToolForm::on_grayBtn_clicked()
+{
+    m_grayScale = !m_grayScale;
+    auto vf = dynamic_cast<VideoForm*>(parent());
+    if (vf) {
+        vf->setGrayScale(m_grayScale);
+    }
+    ui->grayBtn->setStyleSheet(m_grayScale ? "color: #5aa9e6" : "");
+}

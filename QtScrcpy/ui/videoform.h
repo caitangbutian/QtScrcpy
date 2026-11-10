@@ -34,6 +34,7 @@ public:
     void removeBlackRect();
     void showFPS(bool show);
     void switchFullScreen();
+    void setGrayScale(bool on);
     bool isHost();
 
 private:
