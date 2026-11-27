@@ -8,12 +8,14 @@
 #include <QSystemTrayIcon>
 #include <QListWidget>
 #include <QTimer>
+#include <QVector>
 
 
 #include "adbprocess.h"
 #include "../QtScrcpyCore/include/QtScrcpyCore.h"
 #include "audio/audiooutput.h"
 #include "presetconfigdialog.h"
+#include "videoform.h"
 
 namespace Ui
 {
@@ -61,6 +63,7 @@ private slots:
     void on_refreshGameScriptBtn_clicked();
     void on_applyScriptBtn_clicked();
     void on_recordScreenCheck_clicked(bool checked);
+    void on_showToolbar_toggled(bool checked);
     void on_usbConnectBtn_clicked();
     void on_wifiConnectBtn_clicked();
     void on_connectedPhoneList_itemDoubleClicked(QListWidgetItem *item);
@@ -146,6 +149,8 @@ private:
     QAction *m_quit;
     AudioOutput m_audioOutput;
     QTimer m_autoUpdatetimer;
+    // 已连接的投屏窗口，供“显示工具栏”设置即时生效
+    QVector<QPointer<VideoForm>> m_videoForms;
     quint32 m_prevBitRate = 2000000;
     int m_prevMaxSizeIndex = 0;
     QPointer<PresetConfigDialog> m_presetDialog;

@@ -713,6 +713,17 @@ void VideoForm::setGrayScale(bool on)
     }
 }
 
+void VideoForm::setShowToolbar(bool show)
+{
+    show_toolbar = show;
+    // 全屏时工具栏始终隐藏，退出全屏时会按最新 show_toolbar 恢复。
+    // 窗口尚未显示时也只更新状态：showEvent 会在窗口真正显示后处理。
+    if (isFullScreen() || !isVisible()) {
+        return;
+    }
+    showToolForm(show);
+}
+
 void VideoForm::onFrame(int width, int height, uint8_t *dataY, uint8_t *dataU, uint8_t *dataV, int linesizeY, int linesizeU, int linesizeV)
 {
     updateRender(width, height, dataY, dataU, dataV, linesizeY, linesizeU, linesizeV);

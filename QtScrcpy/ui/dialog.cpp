@@ -1261,6 +1261,7 @@ void Dialog::onDeviceConnected(bool success, const QString &serial, const QStrin
     }
     auto videoForm = new VideoForm(ui->framelessCheck->isChecked(), Config::getInstance().getSkin(), ui->showToolbar->isChecked(), ui->decodeModeBox->currentIndex());
     videoForm->setSerial(serial);
+    m_videoForms.append(videoForm);
 
     qsc::IDeviceManage::getInstance().getDevice(serial)->setUserData(static_cast<void*>(videoForm));
     qsc::IDeviceManage::getInstance().getDevice(serial)->registerDeviceObserver(videoForm);
@@ -1311,6 +1312,7 @@ void Dialog::onDeviceDisconnected(QString serial)
     auto data = device->getUserData();
     if (data) {
         VideoForm* vf = static_cast<VideoForm*>(data);
+        m_videoForms.removeAll(vf);
         qsc::IDeviceManage::getInstance().getDevice(serial)->deRegisterDeviceObserver(vf);
         vf->close();
         vf->deleteLater();
@@ -1407,6 +1409,17 @@ void Dialog::on_recordScreenCheck_clicked(bool checked)
     if (fileDir.isEmpty()) {
         qWarning() << "please select record save path!!!";
         ui->recordScreenCheck->setChecked(false);
+    }
+}
+
+void Dialog::on_showToolbar_toggled(bool checked)
+{
+    // 已连接的投屏窗口即时跟随设置，不必断开重连。
+    // 新连接的窗口仍通过 onDeviceConnected() 读取复选框的当前值。
+    for (const QPointer<VideoForm> &videoForm : m_videoForms) {
+        if (videoForm) {
+            videoForm->setShowToolbar(checked);
+        }
     }
 }
 

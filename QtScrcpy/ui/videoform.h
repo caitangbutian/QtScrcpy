@@ -35,6 +35,8 @@ public:
     void showFPS(bool show);
     void switchFullScreen();
     void setGrayScale(bool on);
+    // 运行中切换悬浮工具栏显示（设置页“显示工具栏”勾选变化时调用）
+    void setShowToolbar(bool show);
     bool isHost();
 
 private:
